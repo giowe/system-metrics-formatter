@@ -101,7 +101,7 @@ const _parseData = (data) => new Promise((resolve, reject) => {
         cpuData[Time] = (totald - idled) / totald;
     });
 
-    resolve({diskData, memoryData, cpuData, networkData});
+    resolve({diskData, memoryData, cpuData, networkData, times});
 });
 
 module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
