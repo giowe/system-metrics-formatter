@@ -15,6 +15,27 @@ System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package
 
 ## Installation  
 ``$ npm install system-metrics-formatter``
-## Simple example
-then you can require it in your code
-``require 'system-metrics-formatter'``
+## Usage example
+```js
+#!/usr/bin/env node
+const formatter = require('system-metrics-formatter')
+formatter('bucketName', 'customerId', 'id')
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.log(error)
+    })
+```
+## Arguments
+`Bucket name`     (string): It's used to set s3 bucket name
+
+`Customer Id`     (string): It's a unique identifier used to identify each customer (example: Mario_Rossi)
+
+`Id`              (string): It's an unique identifier used to identify each customer's computer (example: computer_1)
+
+`accessKeyId`     (string): It's used to set aws access key id (optional)
+
+`secretAccessKey` (string): It's used to set aws secret access key (optional)
+
+`region`          (string): It's used to set aws region (optional)
