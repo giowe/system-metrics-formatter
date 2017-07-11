@@ -11,21 +11,21 @@
 
 ## What is System Metrics Formatter?
 System Metrics Formatter is a lib that allows you to format [system-metrics-collector](https://www.npmjs.com/package/system-metrics-formatter) data upload on a aws s3 bucket.
-System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package/metrics2xlsx) to create an excel file.
+System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package/metrics2xlsx) to create an xlsx file.
 
 ## Installation  
 ``$ npm install system-metrics-formatter``
 ## Usage example
 ```js
 #!/usr/bin/env node
-const formatter = require('system-metrics-formatter')
+const formatter = require('system-metrics-formatter');
 formatter('bucketName', 'customerId', 'id')
     .then(result => {
         console.log(result);
     })
     .catch(error => {
-        console.log(error)
-    })
+        console.log(error);
+    });
 ```
 ## Arguments
 `Bucket name`     (string): It's used to set s3 bucket name
