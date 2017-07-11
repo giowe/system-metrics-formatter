@@ -32,5 +32,8 @@
   },
   "devDependencies": {
     "eslint": "^4.1.1"
-  }
+  },
+  "files": [
+    "formatter.js"
+  ]
 }
