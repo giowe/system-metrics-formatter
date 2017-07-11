@@ -6,25 +6,25 @@ const fs = require('fs');
 const zlib = require('zlib');
 
 
-const _listAllKeys = (bucket, customerId, id, out = []) => new Promise((resolve, reject) => {
-  s3.listObjectsV2({
-    Bucket: bucket,
-    MaxKeys: 10,
-    Prefix: `${customerId}/${id}`,
-    StartAfter: out[out.length-1]
-  }, (err, data) => {
-    if (err) return reject(err);
+const _listAllKeys = (bucket, customerId, id, s3, out = []) => new Promise((resolve, reject) => {
+    s3.listObjectsV2({
+        Bucket: bucket,
+        MaxKeys: 10,
+        Prefix: `${customerId}/${id}`,
+        StartAfter: out[out.length-1]
+    }, (err, data) => {
+        if (err) return reject(err);
 
-    data.Contents.forEach(content => {
-      //if (content.LastModificationDate )
-      out.push(content.Key);
+        data.Contents.forEach(content => {
+            //if (content.LastModificationDate )
+            out.push(content.Key);
+        });
+        if (data.IsTruncated) {
+            resolve(_listAllKeys(out));
+        } else {
+            resolve(out);
+        }
     });
-    if (data.IsTruncated) {
-      resolve(_listAllKeys(out));
-    } else {
-      resolve(out);
-    }
-  });
 });
 
 const _parseData = (data) => new Promise((resolve, reject) => {
@@ -52,6 +52,33 @@ const _parseData = (data) => new Promise((resolve, reject) => {
             };
         });
 
+        const networkNames = Object.keys(networkData);
+
+        networkNames.forEach((networkName) => {
+            times.forEach((t, c) => {
+                const networkAtTime = networkData[networkName][t];
+                const networkAtTimePre = c === 0 ? null : networkData[networkName][times[c - 1]];
+                if (networkAtTimePre) {
+                    if (networkAtTime.bytesIn - networkAtTimePre.bytesIn < 0) {
+                        networkData[networkName][t] = {
+                            bytesIn: 'NA',
+                            bytesOut: 'NA'
+                        }
+                    }else{
+                        networkData[networkName][t] = {
+                            bytesIn : networkAtTime.bytesIn - networkAtTimePre.bytesIn,
+                            bytesOut : networkAtTime.bytesOut - networkAtTimePre.bytesOut
+                        }
+                    }
+                } else {
+                    networkData[networkName][t] = {
+                        bytesIn: 'NA',
+                        bytesOut: 'NA'
+                    }
+                }
+            });
+        });
+
         const memoryUtilization = Memory.MemTotal - Memory.MemFree;
         memoryData[Time] = {
             memoryUtilization,
@@ -75,39 +102,45 @@ const _parseData = (data) => new Promise((resolve, reject) => {
 
         cpuData[Time] = (totald - idled) / totald;
     });
+
     resolve({diskData, memoryData, cpuData, networkData});
 });
 
-module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
+const test = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
     const s3 = new AWS.S3({
         accessKeyId,
         secretAccessKey,
         region
     });
 
-    _listAllKeys(bucket, customerId, id)
+    return _listAllKeys(bucket, customerId, id, s3)
         .then(data => {
-        Promise.all(data.sort().map(key => new Promise((resolve, reject) => {
-            s3.getObject({
-                Bucket: config.bucket,
-                Key: key
-            }, (err, data) => {
-                if (err) return reject(err);
-                resolve(JSON.parse(zlib.inflateSync(data.Body).toString()));
-            });
-        })))
-            .then(data => {
-                if (!data.length) console.log(`No data found for:\ncustomerId = ${customerId}\nid = ${id}`);
-                else saveXlsx(data);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    })
+            Promise.all(data.sort().map(key => new Promise((resolve, reject) => {
+                s3.getObject({
+                    Bucket: bucket,
+                    Key: key
+                }, (err, data) => {
+                    if (err) return reject(err);
+                    resolve(JSON.parse(zlib.inflateSync(data.Body).toString()));
+                });
+            })))
+                .then(data => {
+                    if (!data.length){
+                        console.log(`No data found for:\ncustomerId = ${customerId}\nid = ${id}`);
+                    }
+                    else{
+                        return _parseData(data);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        })
         .catch(err => {
             console.log(err);
         });
-    const data = {};
-
-
 };
+
+test().then(result => {
+    console.log(result);
+});
