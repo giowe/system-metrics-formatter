@@ -24,8 +24,8 @@ formatter('bucketName', 'customerId', 'id')
         console.log(result);
     })
     .catch(error => {
-        console.log(error)
-    })
+        console.log(error);
+    });
 ```
 ## Arguments
 `Bucket name`     (string): It's used to set s3 bucket name
