@@ -80,7 +80,6 @@ const _parseData = (data) => new Promise((resolve, reject) => {
 
         const memoryUtilization = Memory.MemTotal - Memory.MemFree;
         memoryData[Time] = {
-            memoryUtilization,
             percentage: memoryUtilization / Memory.MemTotal
         };
 
@@ -105,7 +104,7 @@ const _parseData = (data) => new Promise((resolve, reject) => {
     resolve({diskData, memoryData, cpuData, networkData});
 });
 
-const test = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
+module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
     const s3 = new AWS.S3({
         accessKeyId,
         secretAccessKey,
@@ -132,7 +131,3 @@ const test = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null
             }
         });
 };
-
-test().then(result => {
-    console.log(result);
-});
