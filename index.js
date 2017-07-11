@@ -30,6 +30,7 @@ const _parseData = (data) => new Promise((resolve, reject) => {
   const diskData = {};
   const memoryData = {};
   const cpuData = {};
+  const networkDataRaw = {};
   const networkData = {};
 
 
@@ -45,19 +46,17 @@ const _parseData = (data) => new Promise((resolve, reject) => {
     });
 
     Network.forEach(n => {
-      if (!networkData[n.Name]) networkData[n.Name] = {};
-      networkData[n.Name][Time] = {
+      if (!networkDataRaw[n.Name]) networkDataRaw[n.Name] = {};
+      networkDataRaw[n.Name][Time] = {
         bytesIn: n.BytesIn,
         bytesOut: n.BytesOut
       };
     });
 
-    const networkNames = Object.keys(networkData);
-
-    networkNames.forEach((networkName) => {
+    Object.keys(networkDataRaw).forEach((networkName) => {
       times.forEach((t, c) => {
-        const networkAtTime = networkData[networkName][t];
-        const networkAtTimePre = c === 0 ? null : networkData[networkName][times[c - 1]];
+        const networkAtTime = networkDataRaw[networkName][t];
+        const networkAtTimePre = c === 0 ? null : networkDataRaw[networkName][times[c - 1]];
         if (networkAtTimePre) {
           if (networkAtTime.bytesIn - networkAtTimePre.bytesIn < 0) {
             networkData[networkName][t] = {
