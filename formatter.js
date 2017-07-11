@@ -50,7 +50,6 @@ _listAllKeys()
   });
 
 
-
 module.exports = (bucket, accessKeyId = null, secretAccessKey = null, region = null) => {
     const s3 = new AWS.S3({
         accessKeyId,
