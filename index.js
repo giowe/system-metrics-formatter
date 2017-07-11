@@ -32,6 +32,8 @@ const _parseData = (data) => new Promise((resolve, reject) => {
   const cpuData = {};
   const networkData = {};
 
+
+
   data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
     times.push(Time);
     Disks.forEach(d => {
