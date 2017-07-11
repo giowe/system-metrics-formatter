@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (object, previousObject) => {
+module.exports = (...data) => {
   const times = [];
   const diskData = {};
   const memoryData = {};
@@ -8,7 +8,7 @@ module.exports = (object, previousObject) => {
   const networkDataRaw = {};
   const networkData = {};
 
-  [object, previousObject].forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
+  data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
     times.push(Time);
     Disks.forEach(d => {
       if (!diskData[d.Name]) diskData[d.Name] = {};
