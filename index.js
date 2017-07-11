@@ -1,8 +1,6 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const path =require('path');
-const fs = require('fs');
 const zlib = require('zlib');
 
 const _listAllKeys = (bucket, customerId, id, s3, out = []) => new Promise((resolve, reject) => {
@@ -13,10 +11,7 @@ const _listAllKeys = (bucket, customerId, id, s3, out = []) => new Promise((reso
     StartAfter: out[out.length-1]
   }, (err, data) => {
     if (err) return reject(err);
-    data.Contents.forEach(content => {
-      //if (content.LastModificationDate )
-      out.push(content.Key);
-    });
+    data.Contents.forEach(content => out.push(content.Key));
     if (data.IsTruncated) {
       resolve(_listAllKeys(out));
     } else {
@@ -25,15 +20,13 @@ const _listAllKeys = (bucket, customerId, id, s3, out = []) => new Promise((reso
   });
 });
 
-const _parseData = (data) => new Promise((resolve, reject) => {
+const _parseData = (data) => new Promise(resolve => {
   const times = [];
   const diskData = {};
   const memoryData = {};
   const cpuData = {};
   const networkDataRaw = {};
   const networkData = {};
-
-
 
   data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
     times.push(Time);
@@ -63,18 +56,18 @@ const _parseData = (data) => new Promise((resolve, reject) => {
             networkData[networkName][t] = {
               bytesIn: 'NA',
               bytesOut: 'NA'
-            }
+            };
           }else{
             networkData[networkName][t] = {
               bytesIn : networkAtTime.bytesIn - networkAtTimePre.bytesIn,
               bytesOut : networkAtTime.bytesOut - networkAtTimePre.bytesOut
-            }
+            };
           }
         } else {
           networkData[networkName][t] = {
             bytesIn: 'NA',
             bytesOut: 'NA'
-          }
+          };
         }
       });
     });
@@ -102,7 +95,7 @@ const _parseData = (data) => new Promise((resolve, reject) => {
     cpuData[Time] = (totald - idled) / totald;
   });
 
-  resolve({diskData, memoryData, cpuData, networkData, times});
+  resolve({ diskData, memoryData, cpuData, networkData, times });
 });
 
 module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
@@ -122,7 +115,7 @@ module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = 
           if (err) return reject(err);
           resolve(JSON.parse(zlib.inflateSync(data.Body).toString()));
         });
-      })))
+      })));
     })
     .then(data => {
       if (!data.length){

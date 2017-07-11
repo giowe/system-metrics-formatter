@@ -17,8 +17,7 @@
       "name": "Emanuele Zanni",
       "email": "zanni.emanuele.re@gmail.com",
       "url": "https://github.com/zanni99"
-    }
-  ,
+    },
     {
       "name": "Matteo Carrara",
       "email": "matte.carra@gmail.com",
@@ -27,10 +26,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.82.0",
-    "yargs": "^8.0.2"
+    "aws-sdk": "^2.82.0"
   },
   "devDependencies": {
-    "eslint": "^4.1.1"
+    "eslint": "^4.2.0"
   }
 }
