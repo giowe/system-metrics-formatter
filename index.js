@@ -47,6 +47,7 @@ const _parseData = (data) => new Promise((resolve, reject) => {
 
     Network.forEach(n => {
       if (!networkDataRaw[n.Name]) networkDataRaw[n.Name] = {};
+      if (!networkData[n.Name]) networkData[n.Name] = {};
       networkDataRaw[n.Name][Time] = {
         bytesIn: n.BytesIn,
         bytesOut: n.BytesOut
