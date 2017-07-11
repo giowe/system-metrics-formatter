@@ -1,26 +1,6 @@
 'use strict';
 
-const AWS = require('aws-sdk');
-const zlib = require('zlib');
-
-const _listAllKeys = (bucket, customerId, id, s3, out = []) => new Promise((resolve, reject) => {
-  s3.listObjectsV2({
-    Bucket: bucket,
-    MaxKeys: 10,
-    Prefix: `${customerId}/${id}`,
-    StartAfter: out[out.length-1]
-  }, (err, data) => {
-    if (err) return reject(err);
-    data.Contents.forEach(content => out.push(content.Key));
-    if (data.IsTruncated) {
-      resolve(_listAllKeys(out));
-    } else {
-      resolve(out);
-    }
-  });
-});
-
-const _parseData = (data) => new Promise(resolve => {
+module.exports = (object, previousObject) => {
   const times = [];
   const diskData = {};
   const memoryData = {};
@@ -28,7 +8,7 @@ const _parseData = (data) => new Promise(resolve => {
   const networkDataRaw = {};
   const networkData = {};
 
-  data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
+  [object, previousObject].forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
     times.push(Time);
     Disks.forEach(d => {
       if (!diskData[d.Name]) diskData[d.Name] = {};
@@ -95,33 +75,5 @@ const _parseData = (data) => new Promise(resolve => {
     cpuData[Time] = (totald - idled) / totald;
   });
 
-  resolve({ diskData, memoryData, cpuData, networkData, times });
-});
-
-module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
-  const s3 = (accessKeyId && secretAccessKey && region) ? new AWS.S3({
-    accessKeyId,
-    secretAccessKey,
-    region
-  }) :  new AWS.S3();
-
-  return _listAllKeys(bucket, customerId, id, s3)
-    .then(data => {
-      return Promise.all(data.sort().map(key => new Promise((resolve, reject) => {
-        s3.getObject({
-          Bucket: bucket,
-          Key: key
-        }, (err, data) => {
-          if (err) return reject(err);
-          resolve(JSON.parse(zlib.inflateSync(data.Body).toString()));
-        });
-      })));
-    })
-    .then(data => {
-      if (!data.length){
-        console.log(`No data found for:\ncustomerId = ${customerId}\nid = ${id}`);
-      } else{
-        return _parseData(data);
-      }
-    });
+  return { diskData, memoryData, cpuData, networkData, times };
 };

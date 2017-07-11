@@ -25,9 +25,7 @@
     }
   ],
   "license": "MIT",
-  "dependencies": {
-    "aws-sdk": "^2.82.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^4.2.0"
   }
