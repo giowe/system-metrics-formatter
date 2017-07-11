@@ -1,0 +1,30 @@
+{
+  "name": "system-metrics-formatter",
+  "version": "0.0.1",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giowe/system-metrics-formatter"
+  },
+  "author": "Giovanni Bruno",
+  "contributors": [
+    {
+      "name": "Giovanni Bruno",
+      "email": "giovanni.bruno@soluzionifutura.it",
+      "url": "www.soluzionifutura.it"
+    },
+    {
+      "name": "Emanuele Zanni",
+      "email": "zanni.emanuele.re@gmail.com",
+      "url": "https://github.com/zanni99"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.82.0",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.1"
+  }
+}
