@@ -18,7 +18,7 @@ System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package
 ## Usage example
 ```js
 #!/usr/bin/env node
-const formatter = require('system-metrics-formatter')
+const formatter = require('system-metrics-formatter');
 formatter('bucketName', 'customerId', 'id')
     .then(result => {
         console.log(result);
