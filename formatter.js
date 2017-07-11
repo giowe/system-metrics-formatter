@@ -105,11 +105,11 @@ const _parseData = (data) => new Promise((resolve, reject) => {
 });
 
 module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
-    const s3 = new AWS.S3({
+    const s3 = (accessKeyId && secretAccessKey && region) ? new AWS.S3({
         accessKeyId,
         secretAccessKey,
         region
-    });
+    }) :  new AWS.S3();
 
     return _listAllKeys(bucket, customerId, id, s3)
         .then(data => {

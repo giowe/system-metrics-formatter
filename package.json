@@ -18,6 +18,12 @@
       "email": "zanni.emanuele.re@gmail.com",
       "url": "https://github.com/zanni99"
     }
+  ,
+    {
+      "name": "Matteo Carrara",
+      "email": "matte.carra@gmail.com",
+      "url": "https://github.com/MatteCarra"
+    }
   ],
   "license": "MIT",
   "dependencies": {
