@@ -10,7 +10,7 @@
 [gandalf-image]: http://img.shields.io/badge/gandalf-approved-61C6FF.svg
 
 ## What is System Metrics Formatter?
-System Metrics Formatter is a lib that allows you to format [system-metrics-collector](https://www.npmjs.com/package/system-metrics-formatter) data upload on a aws s3 bucket.
+System Metrics Formatter is a lib that allows you to format [system-metrics-collector](https://www.npmjs.com/package/system-metrics-collector) data upload on a aws s3 bucket.
 System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package/metrics2xlsx) to create an xlsx file.
 
 ## Installation  
