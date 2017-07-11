@@ -5,9 +5,10 @@ const path =require('path');
 const fs = require('fs');
 const zlib = require('zlib');
 
-const _listAllKeys = (out = []) => new Promise((resolve, reject) => {
+
+const _listAllKeys = (bucket, customerId, id, out = []) => new Promise((resolve, reject) => {
   s3.listObjectsV2({
-    Bucket: config.bucket,
+    Bucket: bucket,
     MaxKeys: 10,
     Prefix: `${customerId}/${id}`,
     StartAfter: out[out.length-1]
@@ -26,48 +27,14 @@ const _listAllKeys = (out = []) => new Promise((resolve, reject) => {
   });
 });
 
-_listAllKeys()
-  .then(data => {
-    Promise.all(data.sort().map(key => new Promise((resolve, reject) => {
-      s3.getObject({
-        Bucket: config.bucket,
-        Key: key
-      }, (err, data) => {
-        if (err) return reject(err);
-        resolve(JSON.parse(zlib.inflateSync(data.Body).toString()));
-      });
-    })))
-      .then(data => {
-        if (!data.length) console.log(`No data found for:\ncustomerId = ${customerId}\nid = ${id}`);
-        else saveXlsx(data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
-
-
-module.exports = (bucket, accessKeyId = null, secretAccessKey = null, region = null) => {
-    const s3 = new AWS.S3({
-        accessKeyId,
-        secretAccessKey,
-        region
-    });
-
+const _parseData = (data) => new Promise((resolve, reject) => {
     const times = [];
     const diskData = {};
     const memoryData = {};
     const cpuData = {};
     const networkData = {};
 
-    //TODO get data from s3
-    const data = {};
-
-    data.forEach(({ Time, Disks, Memory, Cpu, Network }, i)=> {
+    data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
         times.push(Time);
         Disks.forEach(d => {
             if (!diskData[d.Name]) diskData[d.Name] = {};
@@ -108,4 +75,39 @@ module.exports = (bucket, accessKeyId = null, secretAccessKey = null, region = n
 
         cpuData[Time] = (totald - idled) / totald;
     });
+    resolve({diskData, memoryData, cpuData, networkData});
+});
+
+module.exports = (bucket, customerId, id, accessKeyId = null, secretAccessKey = null, region = null) => {
+    const s3 = new AWS.S3({
+        accessKeyId,
+        secretAccessKey,
+        region
+    });
+
+    _listAllKeys(bucket, customerId, id)
+        .then(data => {
+        Promise.all(data.sort().map(key => new Promise((resolve, reject) => {
+            s3.getObject({
+                Bucket: config.bucket,
+                Key: key
+            }, (err, data) => {
+                if (err) return reject(err);
+                resolve(JSON.parse(zlib.inflateSync(data.Body).toString()));
+            });
+        })))
+            .then(data => {
+                if (!data.length) console.log(`No data found for:\ncustomerId = ${customerId}\nid = ${id}`);
+                else saveXlsx(data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    })
+        .catch(err => {
+            console.log(err);
+        });
+    const data = {};
+
+
 };
