@@ -45,23 +45,26 @@ module.exports = (...data) => {
       percentage: memoryUtilization / Memory.MemTotal
     };
 
-    if (i === 0) return cpuData = 'NA';
-    const prevCpuTotal = data[i-1].Cpu.TotalCpuUsage;
-    const cpuTotal = Cpu.TotalCpuUsage;
-    const prevIdle = prevCpuTotal.Idle + prevCpuTotal.Iowait;
-    const idle = cpuTotal.Idle + cpuTotal.Iowait;
+    let cpuData;
+    if (i === 0) {
+      cpuData = 'NA';
+    } else {
+      const prevCpuTotal = data[i-1].Cpu.TotalCpuUsage;
+      const cpuTotal = Cpu.TotalCpuUsage;
+      const prevIdle = prevCpuTotal.Idle + prevCpuTotal.Iowait;
+      const idle = cpuTotal.Idle + cpuTotal.Iowait;
 
-    const prevNonIdle = prevCpuTotal.User + prevCpuTotal.Nice + prevCpuTotal.System + prevCpuTotal.Irq + prevCpuTotal.Softirq + prevCpuTotal.Steal;
-    const nonIdle = cpuTotal.User + cpuTotal.Nice + cpuTotal.System + cpuTotal.Irq + cpuTotal.Softirq + cpuTotal.Steal;
+      const prevNonIdle = prevCpuTotal.User + prevCpuTotal.Nice + prevCpuTotal.System + prevCpuTotal.Irq + prevCpuTotal.Softirq + prevCpuTotal.Steal;
+      const nonIdle = cpuTotal.User + cpuTotal.Nice + cpuTotal.System + cpuTotal.Irq + cpuTotal.Softirq + cpuTotal.Steal;
 
-    const prevTotal = prevIdle + prevNonIdle;
-    const total = idle + nonIdle;
+      const prevTotal = prevIdle + prevNonIdle;
+      const total = idle + nonIdle;
 
-    const totald = total - prevTotal;
-    const idled = idle - prevIdle;
+      const totald = total - prevTotal;
+      const idled = idle - prevIdle;
 
-    const cpuData = (totald - idled) / totald;
-
+      cpuData = (totald - idled) / totald;
+    }
     buildedResponse.push({time: Time, diskData, memoryData, cpuData, networkData})
   });
 
