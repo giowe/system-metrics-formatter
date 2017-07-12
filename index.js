@@ -15,14 +15,7 @@ module.exports = (...data) => {
       };
     });
 
-    Network.forEach(n => {
-      networkData[n.Name] = {
-        BytesIn: n.BytesIn,
-        BytesOut: n.BytesOut
-      };
-    });
-
-    Object.keys(networkData).forEach((networkName) => {
+    Object.keys(Network).forEach((networkName) => {
       const networkAtTime = Network[networkName];
       const networkAtTimePre = i === 0 ? null : data[i-1].Network[networkName];
       if (networkAtTimePre) {
