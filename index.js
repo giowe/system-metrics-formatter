@@ -15,20 +15,20 @@ module.exports = (...data) => {
       };
     });
 
-    Object.keys(networkDataRaw).forEach((networkName) => {
+    Object.keys(Network).forEach((networkName) => {
       times.forEach((t, c) => {
         const networkAtTime = Network[networkName];
         const networkAtTimePre = c === 0 ? null : data[i-1].Network[networkName];
         if (networkAtTimePre) {
-          if (networkAtTime.bytesIn - networkAtTimePre.bytesIn < 0) {
-            networkData[networkName][t] = {
+          if (networkAtTime.BytesIn - networkAtTimePre.BytesIn < 0) {
+            networkData[networkName] = {
               bytesIn: 'NA',
               bytesOut: 'NA'
             };
           }else{
-            networkData[networkName][t] = {
-              bytesIn : networkAtTime.bytesIn - networkAtTimePre.bytesIn,
-              bytesOut : networkAtTime.bytesOut - networkAtTimePre.bytesOut
+            networkData[networkName] = {
+              bytesIn : networkAtTime.BytesIn - networkAtTimePre.BytesIn,
+              bytesOut : networkAtTime.BytesOut - networkAtTimePre.BytesOut
             };
           }
         } else {
@@ -68,5 +68,5 @@ module.exports = (...data) => {
     buildedResponse.push({time: Time, diskData, memoryData, cpuData, networkData})
   });
 
-  return buildedResponse;
+  return buildedResponse.reverse();
 };
