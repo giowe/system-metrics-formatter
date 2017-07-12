@@ -4,7 +4,7 @@ module.exports = (...data) => {
   const buildedResponse = [];
 
 
-  data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
+  data.sort().forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
     const diskData = {};
     const networkData = {};
 
@@ -19,15 +19,17 @@ module.exports = (...data) => {
       const networkAtTime = Network[networkName];
       const networkAtTimePre = i === 0 ? null : data[i-1].Network[networkName];
       if (networkAtTimePre) {
-        if (networkAtTime.BytesIn - networkAtTimePre.BytesIn < 0) {
+        const bytesIn = networkAtTime.BytesIn - networkAtTimePre.BytesIn;
+        const bytesOut = networkAtTime.BytesOut - networkAtTimePre.BytesOut;
+        if (bytesIn < 0 || bytesOut < 0) {
           networkData[networkName] = {
             bytesIn: 'NA',
             bytesOut: 'NA'
           };
         }else{
           networkData[networkName] = {
-            bytesIn : networkAtTime.BytesIn - networkAtTimePre.BytesIn,
-            bytesOut : networkAtTime.BytesOut - networkAtTimePre.BytesOut
+            bytesIn,
+            bytesOut
           };
         }
       } else {
