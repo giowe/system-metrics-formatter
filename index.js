@@ -3,13 +3,13 @@
 module.exports = (...data) => {
   const buildedResponse = [];
 
-  data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
+  data.forEach(({ Id, CustomerId, Time, Disks, Memory, Cpu, Network }, i) =>  {
     const diskData = {};
     const networkData = {};
 
     Disks.forEach(d => {
       diskData[d.Name] = {
-        mountPoint: d.MountPoint,
+        mountPath: d.MountPoint,
         available: d.Available,
         used: d.Used
       };
@@ -65,7 +65,7 @@ module.exports = (...data) => {
 
       cpuData = (totald - idled) / totald;
     }
-    buildedResponse.push({time: Time, diskData, memoryData, cpuData, networkData})
+    buildedResponse.push({id: Id, customerId: CustomerId, time: Time, diskData, memoryData, cpuData, networkData})
   });
 
   return buildedResponse;
