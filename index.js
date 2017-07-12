@@ -3,13 +3,13 @@
 module.exports = (...data) => {
   const buildedResponse = [];
 
-
-  data.sort().forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
+  data.forEach(({ Time, Disks, Memory, Cpu, Network }, i) =>  {
     const diskData = {};
     const networkData = {};
 
     Disks.forEach(d => {
       diskData[d.Name] = {
+        mountPoint: d.MountPoint,
         available: d.Available,
         used: d.Used
       };
