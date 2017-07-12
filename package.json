@@ -1,6 +1,6 @@
 {
   "name": "system-metrics-formatter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Format system-metrics-collector's metrics uploaded on aws s3",
   "repository": {
     "type": "git",
