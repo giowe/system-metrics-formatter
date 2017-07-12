@@ -17,7 +17,7 @@ module.exports = (...data) => {
 
     Object.keys(Network).forEach((networkName) => {
       const networkAtTime = Network[networkName];
-      const networkAtTimePre = c === 0 ? null : data[i-1].Network[networkName];
+      const networkAtTimePre = i === 0 ? null : data[i-1].Network[networkName];
       if (networkAtTimePre) {
         if (networkAtTime.BytesIn - networkAtTimePre.BytesIn < 0) {
           networkData[networkName] = {
@@ -31,7 +31,7 @@ module.exports = (...data) => {
           };
         }
       } else {
-        networkData[networkName][t] = {
+        networkData[networkName] = {
           bytesIn: 'NA',
           bytesOut: 'NA'
         };
