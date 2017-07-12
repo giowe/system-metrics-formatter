@@ -16,28 +16,26 @@ module.exports = (...data) => {
     });
 
     Object.keys(Network).forEach((networkName) => {
-      times.forEach((t, c) => {
-        const networkAtTime = Network[networkName];
-        const networkAtTimePre = c === 0 ? null : data[i-1].Network[networkName];
-        if (networkAtTimePre) {
-          if (networkAtTime.BytesIn - networkAtTimePre.BytesIn < 0) {
-            networkData[networkName] = {
-              bytesIn: 'NA',
-              bytesOut: 'NA'
-            };
-          }else{
-            networkData[networkName] = {
-              bytesIn : networkAtTime.BytesIn - networkAtTimePre.BytesIn,
-              bytesOut : networkAtTime.BytesOut - networkAtTimePre.BytesOut
-            };
-          }
-        } else {
-          networkData[networkName][t] = {
+      const networkAtTime = Network[networkName];
+      const networkAtTimePre = c === 0 ? null : data[i-1].Network[networkName];
+      if (networkAtTimePre) {
+        if (networkAtTime.BytesIn - networkAtTimePre.BytesIn < 0) {
+          networkData[networkName] = {
             bytesIn: 'NA',
             bytesOut: 'NA'
           };
+        }else{
+          networkData[networkName] = {
+            bytesIn : networkAtTime.BytesIn - networkAtTimePre.BytesIn,
+            bytesOut : networkAtTime.BytesOut - networkAtTimePre.BytesOut
+          };
         }
-      });
+      } else {
+        networkData[networkName][t] = {
+          bytesIn: 'NA',
+          bytesOut: 'NA'
+        };
+      }
     });
 
     const memoryUtilization = Memory.MemTotal - Memory.MemFree;
