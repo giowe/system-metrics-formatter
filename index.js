@@ -22,7 +22,7 @@ module.exports = (...data) => {
       };
     });
 
-    Object.keys(Network).forEach((networkName) => {
+    Object.keys(networkData).forEach((networkName) => {
       const networkAtTime = Network[networkName];
       const networkAtTimePre = i === 0 ? null : data[i-1].Network[networkName];
       if (networkAtTimePre) {
