@@ -66,5 +66,5 @@ module.exports = (...data) => {
     buildedResponse.push({time: Time, diskData, memoryData, cpuData, networkData})
   });
 
-  return buildedResponse.reverse();
+  return buildedResponse;
 };
