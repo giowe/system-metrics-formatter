@@ -23,8 +23,8 @@ module.exports = (...data) => {
         const bytesOut = networkAtTime.BytesOut - networkAtTimePre.BytesOut;
         if (bytesIn < 0 || bytesOut < 0) {
           networkData[networkName] = {
-            bytesIn: 'NA',
-            bytesOut: 'NA'
+            bytesIn: NaN,
+            bytesOut: NaN
           };
         }else{
           networkData[networkName] = {
@@ -34,8 +34,8 @@ module.exports = (...data) => {
         }
       } else {
         networkData[networkName] = {
-          bytesIn: 'NA',
-          bytesOut: 'NA'
+          bytesIn: NaN,
+          bytesOut: NaN
         };
       }
     });
@@ -51,7 +51,7 @@ module.exports = (...data) => {
 
     let cpuData;
     if (i === 0) {
-      cpuData = 'NA';
+      cpuData = NaN;
     } else {
       const prevCpuTotal = data[i-1].Cpu.TotalCpuUsage;
       const cpuTotal = Cpu.TotalCpuUsage;
