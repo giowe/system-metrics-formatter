@@ -44,7 +44,9 @@ module.exports = (...data) => {
     const memoryData = {
       memoryUsed: memoryUtilization,
       memoryAvailable: Memory.MemAvailable,
-      percentage: memoryUtilization / Memory.MemTotal
+      percentage: memoryUtilization / Memory.MemTotal,
+      swapUtilization: Memory.SwapUtilization,
+      swapUsed: Memory.SwapUsed
     };
 
     let cpuData;
