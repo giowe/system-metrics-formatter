@@ -10,24 +10,31 @@
 [gandalf-image]: http://img.shields.io/badge/gandalf-approved-61C6FF.svg
 
 ## What is System Metrics Formatter?
-System Metrics Formatter is a lib that allows you to format [system-metrics-collector](https://www.npmjs.com/package/system-metrics-formatter) data upload on a aws s3 bucket.
-System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package/metrics2xlsx) to create an excel file.
+System Metrics Formatter is a lib that allows you to format [system-metrics-collector](https://www.npmjs.com/package/system-metrics-collector) data upload on a aws s3 bucket.
+System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package/metrics2xlsx) to create an xlsx file.
 
 ## Installation  
 ``$ npm install system-metrics-formatter``
 ## Usage example
+<<<<<<< HEAD
 ```
 const formatter = require('system-metrics-formatter')
 formatter(...data)
+=======
+```js
+const formatter = require('system-metrics-formatter');
+formatter('bucketName', 'customerId', 'id')
+>>>>>>> e21fa7a000b263812c51321ea25f2feadb514ae3
     .then(result => {
         console.log(result);
     })
     .catch(error => {
-        console.log(error)
-    })
+        console.log(error);
+    });
 ```
 ## Data
 
+<<<<<<< HEAD
 The data array have to be structured like this : 
 ```
 [{
@@ -338,3 +345,6 @@ and will return an array like this one:
 	}
 }]
 ```
+=======
+`region`          (string): It's used to set aws region (optional)
+>>>>>>> e21fa7a000b263812c51321ea25f2feadb514ae3
