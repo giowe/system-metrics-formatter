@@ -46,8 +46,8 @@ module.exports = (...data) => {
     const memoryData = {
       memoryUsed: memoryUtilization,
       memoryAvailable: Memory.MemAvailable,
-      percentage: memoryUtilization / Memory.MemTotal,
-      swapUtilization: swapUsed/swapTotal,
+      percentage: Memory.MemTotal > 0 ? memoryUtilization / Memory.MemTotal : 0,
+      swapUtilization: swapTotal > 0 ? swapUsed/swapTotal : 0,
       swapUsed: swapUsed
     };
 
@@ -69,7 +69,7 @@ module.exports = (...data) => {
       const totald = total - prevTotal;
       const idled = idle - prevIdle;
 
-      cpuData = (totald - idled) / totald;
+      cpuData = totald > 0 ? (totald - idled) / totald : 0;
     }
     buildedResponse.push({id: Id, customerId: CustomerId, time: Time, diskData, memoryData, cpuData, networkData})
   });
