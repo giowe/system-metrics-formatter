@@ -42,6 +42,8 @@ module.exports = (...data) => {
 
     const memoryUtilization = Memory.MemTotal - Memory.MemFree;
     const memoryData = {
+      memoryUsed: memoryUtilization,
+      memoryAvailable: Memory.MemAvailable,
       percentage: memoryUtilization / Memory.MemTotal
     };
 
