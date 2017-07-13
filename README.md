@@ -16,15 +16,9 @@ System Metrics Formatter is used by [metrics2xlsx](https://www.npmjs.com/package
 ## Installation  
 ``$ npm install system-metrics-formatter``
 ## Usage example
-<<<<<<< HEAD
 ```
 const formatter = require('system-metrics-formatter')
 formatter(...data)
-=======
-```js
-const formatter = require('system-metrics-formatter');
-formatter('bucketName', 'customerId', 'id')
->>>>>>> e21fa7a000b263812c51321ea25f2feadb514ae3
     .then(result => {
         console.log(result);
     })
@@ -34,7 +28,6 @@ formatter('bucketName', 'customerId', 'id')
 ```
 ## Data
 
-<<<<<<< HEAD
 The data array have to be structured like this : 
 ```
 [{
@@ -345,6 +338,3 @@ and will return an array like this one:
 	}
 }]
 ```
-=======
-`region`          (string): It's used to set aws region (optional)
->>>>>>> e21fa7a000b263812c51321ea25f2feadb514ae3
