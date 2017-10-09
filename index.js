@@ -40,15 +40,24 @@ module.exports = (...data) => {
       }
     });
 
-    const memoryUtilization = Memory.MemTotal - Memory.MemFree;
-    const swapTotal = Memory.SwapTotal;
-    const swapUsed = swapTotal - Memory.SwapFree;
+    const {MemTotal, MemFree, MemAvailable, SwapFree, SwapTotal} = Memory;
+    const memoryUtilization = MemTotal - MemFree;
+    const memoryUsed = MemTotal - MemAvailable;
+    const swapTotal = SwapTotal;
+    const swapUsed = swapTotal - SwapFree;
     const memoryData = {
-      memoryUsed: memoryUtilization,
-      memoryAvailable: Memory.MemAvailable,
-      percentage: Memory.MemTotal > 0 ? memoryUtilization / Memory.MemTotal : 0,
+      memoryUsed,
+      memoryUsedPercentage: MemTotal > 0 ? memoryUsed / MemTotal : 0,
+
+      memoryUtilization,
+
+      memoryAvailable: MemAvailable,
+      memoryAvailablePercentage: MemTotal > 0 ? MemAvailable / MemTotal : 0,
+
+      memoryFreePercentage: MemTotal > 0 ? MemFree / MemTotal : 0,
+
       swapUtilization: swapTotal > 0 ? swapUsed/swapTotal : 0,
-      swapUsed: swapUsed
+      swapUsed
     };
 
     let cpuData;
